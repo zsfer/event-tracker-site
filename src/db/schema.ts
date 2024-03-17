@@ -1,6 +1,6 @@
 import { text, sqliteTable, integer } from "drizzle-orm/sqlite-core";
 import { createId } from "@paralleldrive/cuid2";
-import { sql } from "drizzle-orm";
+import { InferSelectModel, sql } from "drizzle-orm";
 
 export const user = sqliteTable("user", {
    id: text("id")
@@ -11,6 +11,7 @@ export const user = sqliteTable("user", {
    username: text("username").notNull(),
    password: text("password").notNull(),
    isVerified: integer("is_verified", { mode: "boolean" }).notNull(),
+   avatarUrl: text("avatar_url"),
    dateCreated: integer("date_created", { mode: "timestamp" })
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),
