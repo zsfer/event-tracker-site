@@ -1,8 +1,12 @@
 import { InferSelectModel } from "drizzle-orm";
-import { event, eventTag, notification, user } from "../db/schema";
+import { events, eventTags, notifications, users } from "../db/schema";
 import { User } from "lucide-react";
 
-export type User = InferSelectModel<typeof user>;
-export type Event = InferSelectModel<typeof event>;
-export type EventTag = InferSelectModel<typeof eventTag>;
-export type Notification = InferSelectModel<typeof notification>;
+export type User = InferSelectModel<typeof users>;
+export type Event = InferSelectModel<typeof events>;
+export type EventTag = InferSelectModel<typeof eventTags>;
+export type Notification = InferSelectModel<typeof notifications>;
+
+export type Session = {
+   user?: User;
+};
