@@ -12,8 +12,10 @@ export const Tags = ({
    return (
       <div className="flex flex-row gap-2 items-center">
          {tags.map((t, i) => (
-            <Tag />
+            <Tag key={i} />
          ))}
       </div>
    );
 };
+
+const Tag = () => {};

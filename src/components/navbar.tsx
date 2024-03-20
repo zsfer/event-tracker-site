@@ -1,13 +1,20 @@
 import React from "react";
 import Link from "next/link";
-import { HomeIcon, PencilIcon } from "lucide-react";
+import { BellIcon, HomeIcon, PencilIcon } from "lucide-react";
 import { User } from "../lib/types";
+import { Button } from "./ui/button";
+import { signOut } from "../lib/actions/auth";
 
 const routes = [
    {
       label: "Home",
       route: "/",
       icon: <HomeIcon />,
+   },
+   {
+      label: "Notifications",
+      route: "/notifications",
+      icon: <BellIcon />,
    },
 ];
 export const Navbar = ({ user }: { user: User }) => {
@@ -34,6 +41,16 @@ export const Navbar = ({ user }: { user: User }) => {
                Create event
             </Link>
          )}
+
+         <form>
+            <Button
+               formAction={signOut}
+               variant="ghost"
+               className="w-full rounded-full"
+            >
+               Sign out
+            </Button>
+         </form>
       </nav>
    );
 };

@@ -2,6 +2,9 @@ import React from "react";
 import { getSession } from "@/lib/actions/auth";
 import { redirect } from "next/navigation";
 import { Navbar } from "@/components/navbar";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 const AppLayout = async ({ children }: { children: React.ReactNode }) => {
    const session = await getSession();

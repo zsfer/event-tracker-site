@@ -73,6 +73,12 @@ export const login = async (username: string, password: string) => {
    return user;
 };
 
+export const signOut = () => {
+   cookies().delete("session");
+
+   redirect("/");
+};
+
 export const getSession = async () => {
    const session = cookies().get("session")?.value;
    if (!session) return null;
@@ -110,4 +116,8 @@ export const updateSession = async (request: NextRequest) => {
    // });
 
    return res;
+};
+
+export const getUserFromDb = async (id: string) => {
+   return (await db.select().from(users).where(eq(users.id, id)))[0];
 };

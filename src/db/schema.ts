@@ -1,4 +1,9 @@
-import { text, sqliteTable, integer } from "drizzle-orm/sqlite-core";
+import {
+   text,
+   sqliteTable,
+   integer,
+   primaryKey,
+} from "drizzle-orm/sqlite-core";
 import { createId } from "@paralleldrive/cuid2";
 import { sql } from "drizzle-orm";
 
@@ -25,11 +30,20 @@ export const events = sqliteTable("event", {
    creatorId: text("creator_id").references(() => users.id),
    title: text("title").notNull(),
    description: text("description"),
-   location: text("description"),
+   location: text("location"),
    eventDate: integer("event_date", { mode: "timestamp" }).notNull(),
    dateCreated: integer("date_created", { mode: "timestamp" })
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const eventImages = sqliteTable("event_images", {
+   id: text("id")
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => createId()),
+   event_id: text("event_id").references(() => events.id),
+   image_url: text("image_url").notNull(),
 });
 
 export const eventTags = sqliteTable("event_tags", {
@@ -37,17 +51,29 @@ export const eventTags = sqliteTable("event_tags", {
    tag: text("tag"),
 });
 
-export const eventOrganizers = sqliteTable("event_organizers", {
-   eventId: text("event_id").references(() => events.id),
-   userId: text("user_id").references(() => users.id),
-   role: text("role", { enum: ["organizer", "admin", "moderator"] }),
-});
+export const eventOrganizers = sqliteTable(
+   "event_organizers",
+   {
+      eventId: text("event_id").references(() => events.id),
+      userId: text("user_id").references(() => users.id),
+      role: text("role", { enum: ["organizer", "admin", "moderator"] }),
+   },
+   (table) => {
+      return { pk: primaryKey({ columns: [table.eventId, table.userId] }) };
+   }
+);
 
-export const eventAttendees = sqliteTable("event_attendees", {
-   eventId: text("event_id").references(() => events.id),
-   userId: text("user_id").references(() => users.id),
-   registerDate: integer("register_date", { mode: "timestamp" }),
-});
+export const eventAttendees = sqliteTable(
+   "event_attendees",
+   {
+      eventId: text("event_id").references(() => events.id),
+      userId: text("user_id").references(() => users.id),
+      registerDate: integer("register_date", { mode: "timestamp" }),
+   },
+   (table) => {
+      return { pk: primaryKey({ columns: [table.eventId, table.userId] }) };
+   }
+);
 
 export const comments = sqliteTable("comments", {
    id: text("id")
@@ -64,26 +90,44 @@ export const comments = sqliteTable("comments", {
       .default(sql`CURRENT_TIMESTAMP`),
 });
 
-export const userLikedEvents = sqliteTable("user_liked_posts", {
-   eventId: text("event_id").references(() => events.id),
-   userId: text("user_id").references(() => users.id),
-   dateLiked: integer("date_liked", { mode: "timestamp" }).default(
-      sql`CURRENT_TIMESTAMP`
-   ),
-});
+export const userLikedEvents = sqliteTable(
+   "user_liked_events",
+   {
+      eventId: text("event_id").references(() => events.id),
+      userId: text("user_id").references(() => users.id),
+      dateLiked: integer("date_liked", { mode: "timestamp" }).default(
+         sql`CURRENT_TIMESTAMP`
+      ),
+   },
+   (table) => {
+      return { pk: primaryKey({ columns: [table.eventId, table.userId] }) };
+   }
+);
 
-export const userLikedComments = sqliteTable("user_liked_comments", {
-   commentId: text("comment_id").references(() => comments.id),
-   userId: text("user_id").references(() => users.id),
-   dateLiked: integer("date_liked", { mode: "timestamp" }),
-});
+export const userLikedComments = sqliteTable(
+   "user_liked_comments",
+   {
+      commentId: text("comment_id").references(() => comments.id),
+      userId: text("user_id").references(() => users.id),
+      dateLiked: integer("date_liked", { mode: "timestamp" }),
+   },
+   (table) => {
+      return { pk: primaryKey({ columns: [table.commentId, table.userId] }) };
+   }
+);
 
-export const eventRatings = sqliteTable("event_ratings", {
-   eventId: text("event_id").references(() => events.id),
-   userId: text("user_id").references(() => users.id),
-   rating: integer("rating", { mode: "number" }),
-   dateRated: integer("date_rated", { mode: "timestamp" }),
-});
+export const eventRatings = sqliteTable(
+   "event_ratings",
+   {
+      eventId: text("event_id").references(() => events.id),
+      userId: text("user_id").references(() => users.id),
+      rating: integer("rating", { mode: "number" }),
+      dateRated: integer("date_rated", { mode: "timestamp" }),
+   },
+   (table) => {
+      return { pk: primaryKey({ columns: [table.eventId, table.userId] }) };
+   }
+);
 
 export const notifications = sqliteTable("notification", {
    id: text("id")

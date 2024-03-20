@@ -7,8 +7,10 @@
       "build": "next build",
       "start": "next start",
       "lint": "next lint",
+      "db": "turso dev --db-file local.db",
       "drizzle-studio": "npx drizzle-kit studio",
-      "update-db": "npx drizzle-kit push:sqlite"
+      "db:update": "npx drizzle-kit push:sqlite",
+      "db:generate": "npx drizzle-kit generate:sqlite"
    },
    "dependencies": {
       "@hookform/resolvers": "^3.3.4",
@@ -21,6 +23,7 @@
       "argon2": "^0.40.1",
       "class-variance-authority": "^0.7.0",
       "clsx": "^2.1.0",
+      "dayjs": "^1.11.10",
       "drizzle-orm": "^0.30.2",
       "jose": "^5.2.3",
       "jotai": "^2.7.1",

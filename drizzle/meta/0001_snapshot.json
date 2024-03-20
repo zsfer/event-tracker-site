@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "c2181e4d-8c41-4a81-85a4-35ac38e71d6a",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "31fdf58f-6de6-4541-8ab0-68c17585a9a0",
+  "prevId": "c2181e4d-8c41-4a81-85a4-35ac38e71d6a",
   "tables": {
     "comments": {
       "name": "comments",
@@ -454,6 +454,13 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         },
         "date_created": {

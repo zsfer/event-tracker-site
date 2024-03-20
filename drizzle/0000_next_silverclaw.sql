@@ -8,28 +8,37 @@ CREATE TABLE `comments` (
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-CREATE TABLE `event` (
-	`id` text PRIMARY KEY NOT NULL,
-	`creator_id` text,
-	`title` text NOT NULL,
-	`description` text,
-	`event_date` integer NOT NULL,
-	`date_created` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	FOREIGN KEY (`creator_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
-);
---> statement-breakpoint
 CREATE TABLE `event_attendees` (
 	`event_id` text,
 	`user_id` text,
 	`register_date` integer,
+	PRIMARY KEY(`event_id`, `user_id`),
 	FOREIGN KEY (`event_id`) REFERENCES `event`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `event_images` (
+	`id` text PRIMARY KEY NOT NULL,
+	`event_id` text,
+	`image_url` text NOT NULL,
+	FOREIGN KEY (`event_id`) REFERENCES `event`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `event_organizers` (
 	`event_id` text,
 	`user_id` text,
 	`role` text,
+	PRIMARY KEY(`event_id`, `user_id`),
+	FOREIGN KEY (`event_id`) REFERENCES `event`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `event_ratings` (
+	`event_id` text,
+	`user_id` text,
+	`rating` integer,
+	`date_rated` integer,
+	PRIMARY KEY(`event_id`, `user_id`),
 	FOREIGN KEY (`event_id`) REFERENCES `event`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
@@ -40,13 +49,15 @@ CREATE TABLE `event_tags` (
 	FOREIGN KEY (`event_id`) REFERENCES `event`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-CREATE TABLE `event_ratings` (
-	`event_id` text,
-	`user_id` text,
-	`rating` integer,
-	`date_rated` integer,
-	FOREIGN KEY (`event_id`) REFERENCES `event`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+CREATE TABLE `event` (
+	`id` text PRIMARY KEY NOT NULL,
+	`creator_id` text,
+	`title` text NOT NULL,
+	`description` text,
+	`location` text,
+	`event_date` integer NOT NULL,
+	`date_created` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	FOREIGN KEY (`creator_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `notification` (
@@ -54,6 +65,24 @@ CREATE TABLE `notification` (
 	`user_id` text,
 	`notif_type` text NOT NULL,
 	`date_created` integer DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `user_liked_comments` (
+	`comment_id` text,
+	`user_id` text,
+	`date_liked` integer,
+	PRIMARY KEY(`comment_id`, `user_id`),
+	FOREIGN KEY (`comment_id`) REFERENCES `comments`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `user_liked_events` (
+	`event_id` text,
+	`user_id` text,
+	`date_liked` integer DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY(`event_id`, `user_id`),
+	FOREIGN KEY (`event_id`) REFERENCES `event`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -67,18 +96,4 @@ CREATE TABLE `user` (
 	`date_created` integer DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE `user_liked_comments` (
-	`comment_id` text,
-	`user_id` text,
-	`date_liked` integer,
-	FOREIGN KEY (`comment_id`) REFERENCES `comments`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
-);
---> statement-breakpoint
-CREATE TABLE `user_liked_posts` (
-	`event_id` text,
-	`user_id` text,
-	`date_liked` integer DEFAULT CURRENT_TIMESTAMP,
-	FOREIGN KEY (`event_id`) REFERENCES `event`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
-);
+CREATE UNIQUE INDEX `user_username_unique` ON `user` (`username`);
