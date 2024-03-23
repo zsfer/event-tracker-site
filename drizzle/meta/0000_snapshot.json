@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "c2181e4d-8c41-4a81-85a4-35ac38e71d6a",
+  "id": "9cbb16f9-c4b0-4289-968a-00f0da99d42f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "comments": {
@@ -79,6 +79,13 @@
     "event_attendees": {
       "name": "event_attendees",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
         "event_id": {
           "name": "event_id",
           "type": "text",
@@ -130,15 +137,7 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "event_attendees_event_id_user_id_pk": {
-          "columns": [
-            "event_id",
-            "user_id"
-          ],
-          "name": "event_attendees_event_id_user_id_pk"
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "event_images": {
@@ -188,6 +187,13 @@
     "event_organizers": {
       "name": "event_organizers",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
         "event_id": {
           "name": "event_id",
           "type": "text",
@@ -239,92 +245,19 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "event_organizers_event_id_user_id_pk": {
-          "columns": [
-            "event_id",
-            "user_id"
-          ],
-          "name": "event_organizers_event_id_user_id_pk"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "event_ratings": {
-      "name": "event_ratings",
-      "columns": {
-        "event_id": {
-          "name": "event_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "rating": {
-          "name": "rating",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "date_rated": {
-          "name": "date_rated",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "event_ratings_event_id_event_id_fk": {
-          "name": "event_ratings_event_id_event_id_fk",
-          "tableFrom": "event_ratings",
-          "tableTo": "event",
-          "columnsFrom": [
-            "event_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "event_ratings_user_id_user_id_fk": {
-          "name": "event_ratings_user_id_user_id_fk",
-          "tableFrom": "event_ratings",
-          "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "event_ratings_event_id_user_id_pk": {
-          "columns": [
-            "event_id",
-            "user_id"
-          ],
-          "name": "event_ratings_event_id_user_id_pk"
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "event_tags": {
       "name": "event_tags",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
         "event_id": {
           "name": "event_id",
           "type": "text",

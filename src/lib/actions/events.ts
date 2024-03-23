@@ -1,19 +1,21 @@
 "use server";
 
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { db } from "../../db";
 import {
    comments,
    eventAttendees,
    eventOrganizers,
+   eventTags,
    events,
+   userLikedComments,
    userLikedEvents,
    users,
 } from "../../db/schema";
 import { getSession } from "./auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { notify, notifyEvent } from "./notifications";
+import { notifyEvent } from "./notifications";
 
 export const createEvent = async (form: FormData) => {
    const s = await getSession();
@@ -23,6 +25,8 @@ export const createEvent = async (form: FormData) => {
    const location = form.get("location")?.toString();
    const eventDate = new Date(form.get("date")?.toString()!);
    const dateCreated = new Date(Date.now());
+   const tagsRaw = form.get("tags")?.toString();
+   const tags = tagsRaw?.split(",").map((t) => t.trim().replace(" ", "-"));
 
    const evts = await db
       .insert(events)
@@ -35,6 +39,10 @@ export const createEvent = async (form: FormData) => {
          dateCreated,
       })
       .returning({ eventId: events.id });
+
+   for (const tag of tags!) {
+      await db.insert(eventTags).values({ eventId: evts[0].eventId, tag: tag });
+   }
 
    await db.insert(eventOrganizers).values({
       eventId: evts[0].eventId,
@@ -99,13 +107,11 @@ export const attendEvent = async (form: FormData) => {
    const user = form.get("user")?.toString();
 
    try {
-      await db
-         .insert(eventAttendees)
-         .values({
-            eventId: id,
-            userId: user,
-            registerDate: new Date(Date.now()),
-         });
+      await db.insert(eventAttendees).values({
+         eventId: id,
+         userId: user,
+         registerDate: new Date(Date.now()),
+      });
 
       notifyEvent(id!, "rsvp");
    } catch (e) {
@@ -118,6 +124,14 @@ export const attendEvent = async (form: FormData) => {
             )
          );
    }
+   revalidatePath("/");
+};
+
+export const completeEvent = async (form: FormData) => {
+   const id = form.get("id")?.toString();
+
+   await db.update(events).set({ isComplete: true }).where(eq(events.id, id!));
+
    revalidatePath("/");
 };
 
@@ -135,4 +149,33 @@ export const postComment = async (form: FormData) => {
    notifyEvent(id!, "comment");
 
    revalidatePath("/");
+};
+
+export const getComments = async (event: string) => {
+   const data = await db
+      .select()
+      .from(comments)
+      .where(eq(comments.eventId, event))
+      .innerJoin(users, eq(users.id, comments.userId))
+      .orderBy(desc(comments.dateCommented));
+
+   return data;
+};
+
+export const likeComment = async (form: FormData) => {
+   const session = await getSession();
+   const user = session?.user.id;
+   const comment = form.get("comment")?.toString();
+
+   const comments = await db
+      .insert(userLikedComments)
+      .values({
+         commentId: comment,
+         dateLiked: new Date(Date.now()),
+         userId: user,
+      })
+      .returning();
+
+   revalidatePath("/");
+   return comments[0];
 };

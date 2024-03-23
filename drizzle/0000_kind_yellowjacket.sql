@@ -9,10 +9,10 @@ CREATE TABLE `comments` (
 );
 --> statement-breakpoint
 CREATE TABLE `event_attendees` (
+	`id` text PRIMARY KEY NOT NULL,
 	`event_id` text,
 	`user_id` text,
 	`register_date` integer,
-	PRIMARY KEY(`event_id`, `user_id`),
 	FOREIGN KEY (`event_id`) REFERENCES `event`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
@@ -25,25 +25,16 @@ CREATE TABLE `event_images` (
 );
 --> statement-breakpoint
 CREATE TABLE `event_organizers` (
+	`id` text PRIMARY KEY NOT NULL,
 	`event_id` text,
 	`user_id` text,
 	`role` text,
-	PRIMARY KEY(`event_id`, `user_id`),
-	FOREIGN KEY (`event_id`) REFERENCES `event`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
-);
---> statement-breakpoint
-CREATE TABLE `event_ratings` (
-	`event_id` text,
-	`user_id` text,
-	`rating` integer,
-	`date_rated` integer,
-	PRIMARY KEY(`event_id`, `user_id`),
 	FOREIGN KEY (`event_id`) REFERENCES `event`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `event_tags` (
+	`id` text PRIMARY KEY NOT NULL,
 	`event_id` text,
 	`tag` text,
 	FOREIGN KEY (`event_id`) REFERENCES `event`(`id`) ON UPDATE no action ON DELETE no action

@@ -1,7 +1,12 @@
 import React from "react";
 import { Event } from "@/lib/types";
 import { Button } from "@/components/ui/button";
-import { likeEvent, attendEvent, getEventStatus } from "@/lib/actions/events";
+import {
+   likeEvent,
+   attendEvent,
+   getEventStatus,
+   completeEvent,
+} from "@/lib/actions/events";
 import { getSession } from "@/lib/actions/auth";
 import { cn } from "@/lib/utils";
 
@@ -33,6 +38,13 @@ export const EventActions = async ({ event }: { event: Event }) => {
             )}
          >
             {isAttending && "🫡"} I&apos;m going!
+         </Button>
+         <Button
+            formAction={completeEvent}
+            variant={"outline"}
+            className="rounded-full"
+         >
+            ✅ Set as complete
          </Button>
       </form>
    );

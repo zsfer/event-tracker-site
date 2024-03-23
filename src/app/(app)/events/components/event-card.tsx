@@ -7,6 +7,7 @@ import { CommentInput } from "./comment-input";
 import { CommentSection } from "./comment-section";
 import { UserAvatar } from "@/components/user-avatar";
 import { getUserFromDb } from "@/lib/actions/auth";
+import { cn } from "../../../../lib/utils";
 
 export const EventCard = async ({ event }: { event: Event }) => {
    const user = await getUserFromDb(event.creatorId!);
@@ -24,7 +25,15 @@ export const EventCard = async ({ event }: { event: Event }) => {
             <hr />
             <div className="space-y-1">
                <div className="flex flex-row gap-2 items-center">
-                  <h3 className="font-bold text-xl">{event.title}</h3>
+                  <h3
+                     className={cn(
+                        "font-bold text-xl",
+                        event.isComplete && "text-gray-500"
+                     )}
+                  >
+                     {event.title}
+                     {event.isComplete && "[COMPLETED]"}
+                  </h3>
                   <div className="text-md text-gray-500">
                      on {dayjs(event.eventDate).format("MMM DD, YYYY")}
                   </div>

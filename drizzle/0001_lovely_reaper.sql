@@ -1,0 +1,1 @@
+ALTER TABLE event ADD `is_complete` integer DEFAULT false NOT NULL;

@@ -1,1 +1,0 @@
-ALTER TABLE notification ADD `content` text;

@@ -27,11 +27,22 @@ const NewEventsPage = () => {
             <Label htmlFor="date">Event date</Label>
             <Input id="date" name="date" type="datetime-local" />
 
+            <Label htmlFor="location">Location</Label>
+            <Input id="location" name="location" />
+
             <Label htmlFor="description">Event description</Label>
             <Textarea id="description" name="description" />
 
             <Label htmlFor="image">Image</Label>
             <Input id="image" name="image" type="file" />
+
+            <Label htmlFor="tags">Tags</Label>
+
+            <Input
+               id="tags"
+               name="tags"
+               placeholder="Should be comma-separated"
+            />
             {/* 
             <Label htmlFor="tags">Tags</Label>
             <Tags tags={tags} addTags={setTags} />
